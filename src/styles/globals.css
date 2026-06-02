@@ -1,0 +1,296 @@
+/* ─── Reset & base ──────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #root {
+  height: 100%;
+  background: #0a0a0a;
+  color: #f0f0f0;
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ─── Lights ────────────────────────────────────────────────── */
+.light-grid {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin: 32px 0;
+}
+
+.light {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #1a0000;
+  border: 3px solid #3a0000;
+  transition: background 0.1s, border-color 0.1s;
+}
+
+.light--on {
+  background: #e00000;
+  border-color: #ff4444;
+  box-shadow: 0 0 24px 8px rgba(220, 0, 0, 0.7);
+}
+
+/* ─── Player form ───────────────────────────────────────────── */
+.player-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  gap: 20px;
+  padding: 24px;
+}
+
+.title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  color: #888;
+  font-size: 1rem;
+}
+
+.name-input {
+  width: 100%;
+  max-width: 340px;
+  padding: 14px 16px;
+  font-size: 1.1rem;
+  border: 2px solid #333;
+  border-radius: 8px;
+  background: #111;
+  color: #f0f0f0;
+  outline: none;
+}
+
+.name-input:focus { border-color: #e00000; }
+
+/* ─── Buttons ───────────────────────────────────────────────── */
+.btn-primary {
+  padding: 14px 32px;
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  background: #e00000;
+  color: #fff;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-primary:not(:disabled):hover { background: #c00000; }
+
+.btn-secondary {
+  margin-top: 12px;
+  padding: 10px 24px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 2px solid #444;
+  border-radius: 8px;
+  background: transparent;
+  color: #aaa;
+  cursor: pointer;
+}
+
+.btn-secondary:hover { border-color: #888; color: #eee; }
+
+.btn-ghost {
+  background: none;
+  border: none;
+  color: #444;
+  font-size: 0.75rem;
+  cursor: pointer;
+  margin-top: 16px;
+}
+
+.btn-danger {
+  padding: 8px 16px;
+  background: #800000;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+/* ─── Game screen ───────────────────────────────────────────── */
+.game-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: 24px;
+  user-select: none;
+}
+
+.game-screen--tappable { cursor: pointer; }
+
+.attempt-counter {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 8px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.instruction {
+  font-size: 1.1rem;
+  color: #888;
+  margin-top: 16px;
+}
+
+.instruction--go {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #e00000;
+  letter-spacing: 0.1em;
+}
+
+.tap-hint {
+  position: fixed;
+  bottom: 24px;
+  font-size: 0.8rem;
+  color: #444;
+}
+
+/* ─── False start ───────────────────────────────────────────── */
+.false-start {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.false-start__title {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #e00000;
+  letter-spacing: 0.06em;
+}
+
+/* ─── Result card ───────────────────────────────────────────── */
+.result-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.result-time {
+  font-size: 3.5rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+}
+
+.result-label {
+  font-size: 1rem;
+  color: #aaa;
+  margin-bottom: 16px;
+}
+
+/* ─── Complete screen ───────────────────────────────────────── */
+.complete-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.complete-screen__name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #888;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.complete-screen__meta { font-size: 0.85rem; color: #555; margin-bottom: 8px; }
+.complete-screen__submitted { color: #4caf50; font-size: 0.9rem; }
+
+/* ─── Leaderboard page ──────────────────────────────────────── */
+.leaderboard-page {
+  display: flex;
+  min-height: 100dvh;
+  padding: 40px 32px;
+  gap: 40px;
+}
+
+.leaderboard-main { flex: 1; }
+
+.leaderboard-title {
+  font-size: 2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 32px;
+}
+
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.1rem;
+}
+
+.leaderboard-table th {
+  text-align: left;
+  padding: 10px 16px;
+  color: #555;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid #1e1e1e;
+}
+
+.leaderboard-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #141414;
+}
+
+.leaderboard-table__row--first td { color: #e00000; font-weight: 700; font-size: 1.2rem; }
+
+.leaderboard-loading, .leaderboard-empty { color: #444; font-size: 1rem; }
+
+/* ─── QR panel ──────────────────────────────────────────────── */
+.leaderboard-aside {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 200px;
+}
+
+.qr-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.qr-panel__label { font-size: 0.8rem; color: #666; text-transform: uppercase; letter-spacing: 0.08em; }
+.qr-panel__url { font-size: 0.65rem; color: #444; word-break: break-all; text-align: center; }
+
+/* ─── Admin panel ───────────────────────────────────────────── */
+.admin-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.admin-panel input {
+  padding: 6px 10px;
+  border: 1px solid #333;
+  border-radius: 4px;
+  background: #111;
+  color: #f0f0f0;
+  font-size: 0.85rem;
+}
