@@ -30,3 +30,32 @@ create policy "Public insert" on public.scores for insert with check (true);
 
 -- Enable Realtime for live leaderboard
 -- In Supabase dashboard: Database → Replication → enable "scores" table
+
+-- ─── Sessions table ───────────────────────────────────────────
+create table public.sessions (
+  id uuid primary key default gen_random_uuid(),
+  status text not null default 'lobby' check (status in ('lobby', 'active', 'complete')),
+  created_at timestamptz not null default now(),
+  started_at timestamptz,
+  ended_at timestamptz
+);
+
+alter table public.sessions enable row level security;
+create policy "Public read sessions" on public.sessions for select using (true);
+create policy "Public insert sessions" on public.sessions for insert with check (true);
+create policy "Public update sessions" on public.sessions for update using (true);
+
+-- Add session_id to scores
+alter table public.scores add column session_id uuid references public.sessions(id);
+
+-- ─── Lobby players table ──────────────────────────────────────
+create table public.lobby_players (
+  id uuid primary key default gen_random_uuid(),
+  session_id uuid not null references public.sessions(id),
+  player_name text not null,
+  joined_at timestamptz not null default now()
+);
+
+alter table public.lobby_players enable row level security;
+create policy "Public read lobby" on public.lobby_players for select using (true);
+create policy "Public insert lobby" on public.lobby_players for insert with check (true);

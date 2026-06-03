@@ -131,11 +131,12 @@ export function useReactionGame() {
   );
 
   const submitScore = useCallback(
-    async (score: ScorePayload) => {
+    async (score: ScorePayload, sessionId?: string | null) => {
       setSubmitting(true);
       await supabase.from('scores').insert({
         ...score,
         player_name: playerName,
+        ...(sessionId ? { session_id: sessionId } : {}),
       });
       setSubmitting(false);
       setSubmitted(true);

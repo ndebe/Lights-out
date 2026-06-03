@@ -15,9 +15,10 @@ type Props = {
   submitting: boolean;
   submitted: boolean;
   playerName: string;
+  sessionId?: string | null;
   onInput: () => void;
   onAdvance: () => void;
-  onSubmitScore: (score: ScorePayload) => void;
+  onSubmitScore: (score: ScorePayload, sessionId?: string | null) => void;
   onReset: () => void;
 };
 
@@ -30,6 +31,7 @@ export function GameScreen({
   submitting,
   submitted,
   playerName,
+  sessionId,
   onInput,
   onAdvance,
   onSubmitScore,
@@ -106,7 +108,7 @@ export function GameScreen({
                   False starts: {finalScore.false_starts} &nbsp;|&nbsp; Attempts: {finalScore.attempts}
                 </p>
                 {!submitted && (
-                  <button className="btn-primary" disabled={submitting} onClick={() => onSubmitScore(finalScore)}>
+                  <button className="btn-primary" disabled={submitting} onClick={() => onSubmitScore(finalScore, sessionId)}>
                     {submitting ? 'Submitting…' : 'Submit score'}
                   </button>
                 )}
