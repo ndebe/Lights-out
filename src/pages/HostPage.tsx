@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
 import { supabase } from '../lib/supabase';
 import { useSession } from '../hooks/useSession';
@@ -12,8 +13,16 @@ export function HostPage() {
   const [session, setSession] = useState<Session | null>(null);
   const [creating, setCreating] = useState(false);
 
+  const navigate = useNavigate();
   const { session: liveSession, players } = useSession(session?.id ?? null);
   const current = liveSession ?? session;
+
+  // Redirect host to session leaderboard when session ends
+  useEffect(() => {
+    if (current?.status === 'complete') {
+      navigate(`/leaderboard?session=${current.id}`);
+    }
+  }, [current?.status]);
 
   const playUrl = current
     ? `${window.location.origin}/play?session=${current.id}`
