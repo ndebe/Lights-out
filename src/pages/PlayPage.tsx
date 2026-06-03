@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { PlayerForm } from '../components/PlayerForm';
 import { GameScreen } from '../components/GameScreen';
+import { LobbyScreen } from '../components/LobbyScreen';
 import { useReactionGame } from '../hooks/useReactionGame';
 import { useSession } from '../hooks/useSession';
 import { supabase } from '../lib/supabase';
@@ -9,6 +10,7 @@ import { supabase } from '../lib/supabase';
 export function PlayPage() {
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get('session');
+  const navigate = useNavigate();
 
   const { session, players } = useSession(sessionId);
   const game = useReactionGame();
@@ -22,35 +24,29 @@ export function PlayPage() {
     }
   }, [session?.status]);
 
+  // When session ends, redirect to session leaderboard
+  useEffect(() => {
+    if (session?.status === 'complete' && joinedLobby) {
+      navigate(`/leaderboard?session=${sessionId}`);
+    }
+  }, [session?.status]);
+
   const handleJoin = async (name: string) => {
     setPlayerName(name);
     if (sessionId) {
       await supabase.from('lobby_players').insert({ session_id: sessionId, player_name: name });
       setJoinedLobby(true);
-      // If game already active (late joiner), start immediately
       if (session?.status === 'active') {
         game.startGame(name);
       }
     } else {
-      // No session — solo mode, start immediately
       game.startGame(name);
     }
   };
 
-  // Session mode: show lobby wait screen after joining
+  // Lobby waiting screen
   if (sessionId && joinedLobby && session?.status === 'lobby' && game.gameState === 'idle') {
-    return (
-      <div className="player-form">
-        <div className="lobby-waiting">
-          <div className="lobby-lights">
-            {[0,1,2,3,4].map(i => <div key={i} className="light light--dim" />)}
-          </div>
-          <h2 className="lobby-waiting__title">Ready, {playerName}</h2>
-          <p className="lobby-waiting__sub">Waiting for the host to start…</p>
-          <p className="lobby-waiting__count">{players.length} driver{players.length !== 1 ? 's' : ''} in lobby</p>
-        </div>
-      </div>
-    );
+    return <LobbyScreen playerName={playerName} playerCount={players.length} />;
   }
 
   if (game.gameState === 'idle') {

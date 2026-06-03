@@ -354,3 +354,70 @@ html, body, #root {
 .lobby-waiting__title { font-size: 1.8rem; font-weight: 800; }
 .lobby-waiting__sub { color: #666; font-size: 1rem; }
 .lobby-waiting__count { font-size: 0.85rem; color: #444; margin-top: 4px; }
+
+/* ─── Lobby screen ──────────────────────────────────────────── */
+.lobby-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  gap: 28px;
+  padding: 32px 24px;
+}
+
+.lobby-screen__name {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.lobby-rules {
+  width: 100%;
+  max-width: 360px;
+  background: #1a1a24;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.lobby-rules__heading {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #555;
+  margin-bottom: 14px;
+}
+
+.lobby-rules__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lobby-rules__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.95rem;
+  color: #ccc;
+  line-height: 1.4;
+}
+
+.lobby-rules__icon { font-size: 1.1rem; flex-shrink: 0; }
+
+.lobby-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.lobby-status__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #F70000;
+}

@@ -1,17 +1,24 @@
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { LeaderboardTable } from '../components/LeaderboardTable';
 import { QRCodePanel } from '../components/QRCodePanel';
 import { useLeaderboard } from '../hooks/useLeaderboard';
 import { supabase } from '../lib/supabase';
 
 const ADMIN_PASSCODE = import.meta.env.VITE_ADMIN_PASSCODE ?? 'lightsout';
-const PLAY_URL = `${window.location.origin}/play`;
 
 export function LeaderboardPage() {
-  const { entries, loading } = useLeaderboard();
+  const [searchParams] = useSearchParams();
+  const sessionId = searchParams.get('session');
+
+  const { entries, loading } = useLeaderboard(sessionId);
   const [showAdmin, setShowAdmin] = useState(false);
   const [passcode, setPasscode] = useState('');
   const [clearing, setClearing] = useState(false);
+
+  const playUrl = sessionId
+    ? `${window.location.origin}/play?session=${sessionId}`
+    : `${window.location.origin}/play`;
 
   const handleClear = async () => {
     if (passcode !== ADMIN_PASSCODE) {
@@ -19,7 +26,11 @@ export function LeaderboardPage() {
       return;
     }
     setClearing(true);
-    await supabase.from('scores').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+    if (sessionId) {
+      await supabase.from('scores').delete().eq('session_id', sessionId);
+    } else {
+      await supabase.from('scores').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+    }
     setClearing(false);
     setShowAdmin(false);
     setPasscode('');
@@ -28,12 +39,14 @@ export function LeaderboardPage() {
   return (
     <div className="leaderboard-page">
       <div className="leaderboard-main">
-        <h1 className="leaderboard-title">Lights Out Leaderboard</h1>
+        <h1 className="leaderboard-title">
+          {sessionId ? 'Session Results' : 'Lights Out Leaderboard'}
+        </h1>
         <LeaderboardTable entries={entries} loading={loading} />
       </div>
 
       <aside className="leaderboard-aside">
-        <QRCodePanel url={PLAY_URL} />
+        <QRCodePanel url={playUrl} />
         <button className="btn-ghost admin-toggle" onClick={() => setShowAdmin((v) => !v)}>
           Admin
         </button>
