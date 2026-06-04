@@ -421,3 +421,5 @@ html, body, #root {
   border-radius: 50%;
   background: #F70000;
 }
+
+.leaderboard-restart { margin-top: 32px; }

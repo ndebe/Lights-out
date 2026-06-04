@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { LeaderboardTable } from '../components/LeaderboardTable';
-import { QRCodePanel } from '../components/QRCodePanel';
 import { useLeaderboard } from '../hooks/useLeaderboard';
 import { supabase } from '../lib/supabase';
 
@@ -10,15 +9,12 @@ const ADMIN_PASSCODE = import.meta.env.VITE_ADMIN_PASSCODE ?? 'lightsout';
 export function LeaderboardPage() {
   const [searchParams] = useSearchParams();
   const sessionId = searchParams.get('session');
+  const navigate = useNavigate();
 
   const { entries, loading } = useLeaderboard(sessionId);
   const [showAdmin, setShowAdmin] = useState(false);
   const [passcode, setPasscode] = useState('');
   const [clearing, setClearing] = useState(false);
-
-  const playUrl = sessionId
-    ? `${window.location.origin}/play?session=${sessionId}`
-    : `${window.location.origin}/play`;
 
   const handleClear = async () => {
     if (passcode !== ADMIN_PASSCODE) {
@@ -43,10 +39,15 @@ export function LeaderboardPage() {
           {sessionId ? 'Session Results' : 'Lights Out Leaderboard'}
         </h1>
         <LeaderboardTable entries={entries} loading={loading} />
+
+        {sessionId && (
+          <button className="btn-primary leaderboard-restart" onClick={() => navigate('/host')}>
+            Start new session
+          </button>
+        )}
       </div>
 
       <aside className="leaderboard-aside">
-        <QRCodePanel url={playUrl} />
         <button className="btn-ghost admin-toggle" onClick={() => setShowAdmin((v) => !v)}>
           Admin
         </button>
