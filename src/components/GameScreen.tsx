@@ -37,6 +37,13 @@ export function GameScreen({
   onSubmitScore,
   onReset,
 }: Props) {
+  // Auto-submit score when complete (no button needed in session mode)
+  useEffect(() => {
+    if (gameState === 'complete' && finalScore && !submitted && !submitting) {
+      onSubmitScore(finalScore, sessionId);
+    }
+  }, [gameState, finalScore]);
+
   // Keyboard support (spacebar)
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -107,12 +114,9 @@ export function GameScreen({
                 <p className="complete-screen__meta">
                   False starts: {finalScore.false_starts} &nbsp;|&nbsp; Attempts: {finalScore.attempts}
                 </p>
-                {!submitted && (
-                  <button className="btn-primary" disabled={submitting} onClick={() => onSubmitScore(finalScore, sessionId)}>
-                    {submitting ? 'Submitting…' : 'Submit score'}
-                  </button>
-                )}
-                {submitted && <p className="complete-screen__submitted">Score submitted!</p>}
+                <p className="complete-screen__submitted">
+                  {submitting ? 'Submitting…' : submitted ? 'Score submitted!' : ''}
+                </p>
               </>
             ) : (
               <p>No valid attempts. Try again!</p>
